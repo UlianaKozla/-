@@ -50,13 +50,14 @@ app.get('/users', (req, res) => {
 app.get('/user/:idUser', (req,res)=> {
     const {idUser} = req.params;
     const finder = users.find(user => user.id === +idUser);
-    res.render('user', { name : `${finder.name}`, surname : `${finder.surname}`, City : `${finder.city}`})
+   finder ? res.render('user', { name : `${finder.name}`, surname : `${finder.surname}`, City : `${finder.city}`})
+        : res.json('This ID is not found')
 });
 
 app.post('/login', (req, res) => {
     const person = req.body;
     const finder = users.find( user => user.email === person.email && user.password === person.password);
-    res.redirect(`/user/${finder.id}`);
+    finder ? res.redirect(`/user/${finder.id}`) : res.json('Your password or email is not right')
 });
 
 app.post('/flat', (req, res) => {
@@ -69,7 +70,8 @@ app.post('/flat', (req, res) => {
 app.get('/flat/:idFlat', (req, res) => {
     const {idFlat} = req.params;
     const finder = flats.find(flat => flat.id === +idFlat);
-    res.render('flatByID', {SquereMetres: `${finder.SquereMetres}`, Price: `${finder.price}`, City: `${finder.city}`})
+    finder ? res.render('flatByID', {SquereMetres: `${finder.SquereMetres}`, Price: `${finder.price}`, City: `${finder.city}`})
+        : res.json('This ID is not found')
 })
 
 app.get('/flats', (req, res) => {
